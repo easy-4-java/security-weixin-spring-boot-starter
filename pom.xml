@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>security-weixin-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Spring Security With Weixin </description>
-	<version>2.3.x.20240823-SNAPSHOT</version>
+	<version>2.3.x.20240823.RELEASE</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -359,6 +359,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<commons-io.version>2.16.1</commons-io.version>
+		<fastjson2.version>2.0.52</fastjson2.version>
 		<maven.version>3.0</maven.version>
        	<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
@@ -380,7 +381,12 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
 			</dependency>
-
+			<!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+			<dependency>
+				<groupId>com.alibaba.fastjson2</groupId>
+				<artifactId>fastjson2</artifactId>
+				<version>${fastjson2.version}</version>
+			</dependency>
 			<!-- https://github.com/hiwepy/security-biz-spring-boot-starter -->
 			<dependency>
 				<groupId>com.github.hiwepy</groupId>
@@ -534,7 +540,10 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
   			<artifactId>jackson-databind</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
+		</dependency>
 		<!-- https://github.com/hiwepy/security-biz-spring-boot-starter -->
 		<dependency>
 			<groupId>com.github.hiwepy</groupId>
