@@ -1,8 +1,7 @@
 package org.springframework.security.boot;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.biz.web.servlet.i18n.LocaleContextFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -29,15 +28,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import me.chanjar.weixin.mp.api.WxMpService;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @ConditionalOnClass(WxMpService.class)
@@ -46,15 +45,15 @@ import me.chanjar.weixin.mp.api.WxMpService;
 public class SecurityWxMpFilterConfiguration {
     
 	@Bean
-	public WxMpAuthenticationProvider wxMpAuthenticationProvider(WxMpService wxMpService,
-			UserDetailsServiceAdapter userDetailsService, PasswordEncoder passwordEncoder) {
-		return new WxMpAuthenticationProvider(wxMpService, userDetailsService, passwordEncoder);
+	public WxMpAuthenticationProvider wxMpAuthenticationProvider(ObjectProvider<WxMpService> wxMpServicerovider,
+																 ObjectProvider<UserDetailsServiceAdapter> userDetailsServiceProvider,
+																 ObjectProvider<PasswordEncoder> passwordEncoderProvider) {
+		return new WxMpAuthenticationProvider(wxMpServicerovider.getIfAvailable(), userDetailsServiceProvider.getIfAvailable(), passwordEncoderProvider.getIfAvailable());
 	}
 	
     @Configuration
    	@EnableConfigurationProperties({ SecurityWxProperties.class, SecurityWxMpAuthcProperties.class, SecurityBizProperties.class })
-    @Order(SecurityProperties.DEFAULT_FILTER_ORDER + 7)
-   	static class WxMpWebSecurityConfigurerAdapter extends WebSecurityBizConfigurerAdapter {
+    static class WxMpWebSecurityCustomizerAdapter extends WebSecurityCustomizerAdapter {
     	
     	private final SecurityWxMpAuthcProperties authcProperties;
 
@@ -66,7 +65,7 @@ public class SecurityWxMpFilterConfiguration {
     	private final RememberMeServices rememberMeServices;
 		private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
    		
-   		public WxMpWebSecurityConfigurerAdapter(
+   		public WxMpWebSecurityCustomizerAdapter(
    			
    				SecurityBizProperties bizProperties,
 				SecuritySessionMgtProperties sessionMgtProperties,
@@ -126,8 +125,9 @@ public class SecurityWxMpFilterConfiguration {
    	        return authenticationFilter;
    	    }
 
-   	    @Override
-		public void configure(HttpSecurity http) throws Exception {
+		@Bean
+		@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 7)
+		public SecurityFilterChain wxMpSecurityFilterChain(HttpSecurity http) throws Exception {
 			
 	    	http.antMatcher(authcProperties.getPathPattern())
 	        	.exceptionHandling()
@@ -142,14 +142,15 @@ public class SecurityWxMpFilterConfiguration {
 	    	super.configure(http, authcProperties.getCsrf());
 	    	super.configure(http, authcProperties.getHeaders());
 	    	super.configure(http);
+
+			return http.build();
 	    	
 		}
-		
-		@Override
-	    public void configure(WebSecurity web) throws Exception {
-	    	super.configure(web);
-	    }
 
+		@Override
+		public void customize(WebSecurity web) {
+			super.customize(web);
+		}
    	}
 
 }

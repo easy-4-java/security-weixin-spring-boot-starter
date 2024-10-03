@@ -33,7 +33,9 @@ import lombok.ToString;
 public class SecurityWxMaAuthcProperties extends SecurityAuthcProperties {
 
 	public static final String PREFIX = "spring.security.weixin.ma";
-	
+
+    boolean debug = false;
+
 	/** the jscode parameter name. Defaults to "jscode". */
     private String jscodeParameter = WxMaAuthenticationProcessingFilter.SPRING_SECURITY_FORM_JSCODE_KEY;
     /** the signature parameter name. Defaults to "signature". */

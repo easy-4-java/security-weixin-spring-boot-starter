@@ -1,8 +1,7 @@
 package org.springframework.security.boot;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.biz.web.servlet.i18n.LocaleContextFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -29,15 +28,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cn.binarywang.wx.miniapp.api.WxMaService;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @ConditionalOnClass(WxMaService.class)
@@ -46,15 +45,15 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 public class SecurityWxMaFilterConfiguration {
     
 	@Bean
-	public WxMaAuthenticationProvider wxJsCodeAuthenticationProvider(WxMaService wxMaService,
-			UserDetailsServiceAdapter userDetailsService, PasswordEncoder passwordEncoder) {
-		return new WxMaAuthenticationProvider(wxMaService, userDetailsService, passwordEncoder);
+	public WxMaAuthenticationProvider wxJsCodeAuthenticationProvider(ObjectProvider<WxMaService> wxMaServiceProvider,
+																	 ObjectProvider<UserDetailsServiceAdapter> userDetailsServiceProvider,
+																	 ObjectProvider<PasswordEncoder> passwordEncoderProvider) {
+		return new WxMaAuthenticationProvider(wxMaServiceProvider.getIfAvailable(), userDetailsServiceProvider.getIfAvailable(), passwordEncoderProvider.getIfAvailable());
 	}
-	
+
     @Configuration
     @EnableConfigurationProperties({ SecurityWxProperties.class, SecurityWxMaAuthcProperties.class, SecurityBizProperties.class })
-    @Order(SecurityProperties.DEFAULT_FILTER_ORDER + 8)
-   	static class WxMaWebSecurityConfigurerAdapter extends WebSecurityBizConfigurerAdapter {
+   	static class WxMaWebSecurityCustomizerAdapter extends WebSecurityCustomizerAdapter {
     	
     	private final SecurityWxMaAuthcProperties authcProperties;
 
@@ -66,7 +65,7 @@ public class SecurityWxMaFilterConfiguration {
     	private final RememberMeServices rememberMeServices;
 		private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
    		
-   		public WxMaWebSecurityConfigurerAdapter(
+   		public WxMaWebSecurityCustomizerAdapter(
    			
    				SecurityBizProperties bizProperties,
 				SecuritySessionMgtProperties sessionMgtProperties,
@@ -130,30 +129,31 @@ public class SecurityWxMaFilterConfiguration {
    	        return authenticationFilter;
    	    }
 
-   	    @Override
-		public void configure(HttpSecurity http) throws Exception {
-			
-	    	http.antMatcher(authcProperties.getPathPattern())
-	        	.exceptionHandling()
-	        	.authenticationEntryPoint(authenticationEntryPoint)
-	        	.and()
-	        	.httpBasic()
-	        	.disable()
-	        	.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
-	        	.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class); 
+   		@Bean
+		@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 8)
+		public SecurityFilterChain wxMaSecurityFilterChain(HttpSecurity http) throws Exception {
+			http = http.antMatcher(authcProperties.getPathPattern())
+					.exceptionHandling()
+					.authenticationEntryPoint(authenticationEntryPoint)
+					.and()
+					.httpBasic()
+					.disable()
+					.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
+					.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
-	    	super.configure(http, authcProperties.getCors());
-	    	super.configure(http, authcProperties.getCsrf());
-	    	super.configure(http, authcProperties.getHeaders());
-	    	super.configure(http);
-	    	
+			super.configure(http, authcProperties.getCors());
+			super.configure(http, authcProperties.getCsrf());
+			super.configure(http, authcProperties.getHeaders());
+			super.configure(http);
+
+			return http.build();
 		}
-		
+
 		@Override
-	    public void configure(WebSecurity web) throws Exception {
-	    	super.configure(web);
+	    public void customize(WebSecurity web) {
+	    	super.customize(web);
 	    }
 
-   	}
+	}
 
 }

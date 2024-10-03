@@ -1,5 +1,6 @@
 package org.springframework.security.boot;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +26,8 @@ public class SecurityWxAutoConfiguration{
 	}
 	
 	@Bean
-	public WxMatchedAuthenticationSuccessHandler wxMatchedAuthenticationSuccessHandler(JwtPayloadRepository payloadRepository) {
-		return new WxMatchedAuthenticationSuccessHandler(payloadRepository);
+	public WxMatchedAuthenticationSuccessHandler wxMatchedAuthenticationSuccessHandler(ObjectProvider<JwtPayloadRepository> payloadRepositoryProvider) {
+		return new WxMatchedAuthenticationSuccessHandler(payloadRepositoryProvider.getIfAvailable());
 	}
 	
 }
