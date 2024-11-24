@@ -15,6 +15,9 @@
  */
 package org.springframework.security.boot;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.security.boot.biz.property.SecurityAuthcProperties;
@@ -22,10 +25,6 @@ import org.springframework.security.boot.biz.property.SecurityLogoutProperties;
 import org.springframework.security.boot.biz.property.SecurityRedirectProperties;
 import org.springframework.security.boot.weixin.authentication.WxMaAuthenticationProcessingFilter;
 import org.springframework.security.boot.weixin.authentication.WxMpAuthenticationProcessingFilter;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @ConfigurationProperties(SecurityWxMpAuthcProperties.PREFIX)
 @Getter

@@ -14,14 +14,12 @@
  * the License.
  */
 package org.springframework.security.boot.weixin.authentication;
-import java.util.Collection;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
-import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
-import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+import java.util.Collection;
 
 public class WxMaAuthenticationToken extends AbstractAuthenticationToken {
     

@@ -14,13 +14,12 @@
  * the License.
  */
 package org.springframework.security.boot.weixin.authentication;
-import java.util.Collection;
 
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
-import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
+
+import java.util.Collection;
 
 public class WxMpAuthenticationToken extends AbstractAuthenticationToken {
 
