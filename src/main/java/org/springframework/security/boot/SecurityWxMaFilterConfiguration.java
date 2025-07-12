@@ -26,9 +26,12 @@ import org.springframework.security.boot.weixin.authentication.WxMaAuthenticatio
 import org.springframework.security.boot.weixin.authentication.WxMaAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.CompositeAccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -57,6 +60,7 @@ public class SecurityWxMaFilterConfiguration {
     	
     	private final SecurityWxMaAuthcProperties authcProperties;
 
+		private final AccessDeniedHandler accessDeniedHandler;
     	private final LocaleContextFilter localeContextFilter;
 	    private final AuthenticationEntryPoint authenticationEntryPoint;
 	    private final AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -71,6 +75,7 @@ public class SecurityWxMaFilterConfiguration {
 				SecuritySessionMgtProperties sessionMgtProperties,
    				SecurityWxMaAuthcProperties authcProperties,
 
+				ObjectProvider<AccessDeniedHandler> accessDeniedHandlerProvider,
    				ObjectProvider<LocaleContextFilter> localeContextProvider,
 				ObjectProvider<AuthenticationProvider> authenticationProvider,
    				ObjectProvider<AuthenticationListener> authenticationListenerProvider,
@@ -87,6 +92,7 @@ public class SecurityWxMaFilterConfiguration {
    			
    			this.authcProperties = authcProperties;
 
+			this.accessDeniedHandler = new CompositeAccessDeniedHandler(accessDeniedHandlerProvider.stream().collect(Collectors.toList()));
    			this.localeContextFilter = localeContextProvider.getIfAvailable();
    			List<AuthenticationListener> authenticationListeners = authenticationListenerProvider.stream().collect(Collectors.toList());
    			this.authenticationEntryPoint = WebSecurityUtils.authenticationEntryPoint(authcProperties, sessionMgtProperties, authenticationEntryPointProvider.stream().collect(Collectors.toList()));
@@ -132,13 +138,15 @@ public class SecurityWxMaFilterConfiguration {
    		@Bean
 		@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 8)
 		public SecurityFilterChain wxMaSecurityFilterChain(HttpSecurity http) throws Exception {
-			http = http.antMatcher(authcProperties.getPathPattern())
-					.exceptionHandling()
-					.authenticationEntryPoint(authenticationEntryPoint)
-					.and()
-					.httpBasic()
-					.disable()
-					.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
+
+			http.securityMatcher(authcProperties.getPathPattern())
+					.exceptionHandling(configurer -> {
+						configurer.authenticationEntryPoint(authenticationEntryPoint)
+								.accessDeniedHandler(accessDeniedHandler)
+								.accessDeniedPage(authcProperties.getAccessDeniedUrl());
+					});
+			http.httpBasic(AbstractHttpConfigurer::disable);
+			http.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
 					.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
 			super.configure(http, authcProperties.getCors());
