@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>security-weixin-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Spring Security With Weixin </description>
-	<version>3.3.x.20241003-SNAPSHOT</version>
+	<version>3.3.x.20250712-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -385,10 +385,10 @@
 		<maven-war-plugin.version>3.4.0</maven-war-plugin.version>
 		<!-- Dependency versions -->
 		<commons-io.version>2.16.1</commons-io.version>
-		<fastjson2.version>2.0.53</fastjson2.version>
-		<jwt-issuer.version>1.1.4.1.RELEASE</jwt-issuer.version>
+		<fastjson2.version>2.0.57</fastjson2.version>
+		<jwt-issuer.version>1.1.8.RELEASE</jwt-issuer.version>
 		<spring-boot-starter-security-biz.version>3.3.x.20241003.RELEASE</spring-boot-starter-security-biz.version>
-		<weixin-java.version>4.6.6.B</weixin-java.version>
+		<weixin-java.version>4.7.6.B</weixin-java.version>
 	</properties>
 
 	<dependencyManagement>

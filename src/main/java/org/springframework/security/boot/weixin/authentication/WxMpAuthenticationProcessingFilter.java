@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Setter;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -41,9 +42,12 @@ public class WxMpAuthenticationProcessingFilter extends PostOnlyAuthenticationPr
 	public static final String SPRING_SECURITY_FORM_STATE_KEY = "state";
 	public static final String SPRING_SECURITY_FORM_TOKEN_KEY = "token";
 
+    @Setter
     private String codeParameter = SPRING_SECURITY_FORM_CODE_KEY;
+	@Setter
     private String stateParameter = SPRING_SECURITY_FORM_STATE_KEY;
-	private String tokenParameter = SPRING_SECURITY_FORM_TOKEN_KEY;
+	@Setter
+    private String tokenParameter = SPRING_SECURITY_FORM_TOKEN_KEY;
 	private final ObjectMapper objectMapper;
 	
     public WxMpAuthenticationProcessingFilter(ObjectMapper objectMapper) {
@@ -128,22 +132,6 @@ public class WxMpAuthenticationProcessingFilter extends PostOnlyAuthenticationPr
 
 	protected String obtainToken(HttpServletRequest request) {
 		return request.getParameter(tokenParameter);
-	}
-
-	public String getCodeParameter() {
-		return codeParameter;
-	}
-
-	public void setCodeParameter(String codeParameter) {
-		this.codeParameter = codeParameter;
-	}
-
-	public void setTokenParameter(String tokenParameter) {
-		this.tokenParameter = tokenParameter;
-	}
-
-	public String getTokenParameter() {
-		return tokenParameter;
 	}
 
 }

@@ -4,6 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +29,12 @@ import java.nio.charset.StandardCharsets;
 public class WxMatchedAuthenticationSuccessHandler implements MatchedAuthenticationSuccessHandler {
    
 	protected MessageSourceAccessor messages = SpringSecurityBizMessageSource.getAccessor();
-	private JwtPayloadRepository payloadRepository;
-	private boolean checkExpiry = false;
+	@Setter
+    @Getter
+    private JwtPayloadRepository payloadRepository;
+	@Setter
+    @Getter
+    private boolean checkExpiry = false;
 	
 	public WxMatchedAuthenticationSuccessHandler(JwtPayloadRepository payloadRepository) {
 		this.setPayloadRepository(payloadRepository);
@@ -54,21 +60,5 @@ public class WxMatchedAuthenticationSuccessHandler implements MatchedAuthenticat
 		JSON.writeTo(response.getOutputStream(), AuthResponse.success(message, profilePayload));
 		
     }
-    
-	public JwtPayloadRepository getPayloadRepository() {
-		return payloadRepository;
-	}
-
-	public void setPayloadRepository(JwtPayloadRepository payloadRepository) {
-		this.payloadRepository = payloadRepository;
-	}
-
-	public boolean isCheckExpiry() {
-		return checkExpiry;
-	}
-
-	public void setCheckExpiry(boolean checkExpiry) {
-		this.checkExpiry = checkExpiry;
-	}
 
 }
