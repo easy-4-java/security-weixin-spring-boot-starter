@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.github.hiwepy</groupId>
+	<groupId>io.github.hiwepy</groupId>
 	<artifactId>security-weixin-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Spring Security With Weixin </description>
 	<version>1.0.2.RELEASE</version>
@@ -389,25 +389,25 @@
 			    <version>${fastjson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-api</artifactId>
 				<version>${jwt-issuer.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-with-jjwt</artifactId>
 				<version>${jwt-issuer.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-with-nimbus</artifactId>
 				<version>${jwt-issuer.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<!-- https://github.com/hiwepy/security-biz-spring-boot-starter -->
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>security-biz-spring-boot-starter</artifactId>
 				<version>${spring-security-biz.version}</version>
 			</dependency>
@@ -553,22 +553,22 @@
 		    <artifactId>fastjson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>jwt-issuer-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>jwt-issuer-with-jjwt</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>jwt-issuer-with-nimbus</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<!-- https://github.com/hiwepy/security-biz-spring-boot-starter -->
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>security-biz-spring-boot-starter</artifactId>
 		</dependency>
 
