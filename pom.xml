@@ -413,19 +413,19 @@
 				<artifactId>security-biz-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-security-biz.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.github.hiwepy/jwt-issuer-api -->
+			<!-- https://mvnrepository.com/artifact/io.github.hiwepy/jwt-issuer-api -->
 			<dependency>
 				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-api</artifactId>
 				<version>${jwt-issuer.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.github.hiwepy/jwt-issuer-with-jjwt -->
+			<!-- https://mvnrepository.com/artifact/io.github.hiwepy/jwt-issuer-with-jjwt -->
 			<dependency>
 				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-with-jjwt</artifactId>
 				<version>${jwt-issuer.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.github.hiwepy/jwt-issuer-with-nimbus -->
+			<!-- https://mvnrepository.com/artifact/io.github.hiwepy/jwt-issuer-with-nimbus -->
 			<dependency>
 				<groupId>io.github.hiwepy</groupId>
 				<artifactId>jwt-issuer-with-nimbus</artifactId>
